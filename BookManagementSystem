@@ -1,0 +1,121 @@
+import java.util.Scanner;
+public class BookManagementSystem {
+    public static void main(String[] args) {
+        Library library = new Library();
+        Scanner sc = new Scanner(System.in);
+
+        
+        while (true) {
+            System.out.println("\n1. Add Book\n2. Replace Book\n3. Display Books\n4. Exit");
+            System.out.print("Choose option: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            if (choice == 1) {
+                System.out.print("Enter ID: ");
+                int id = sc.nextInt();
+                sc.nextLine(); // consume newline
+                System.out.print("Enter title: ");
+                String title = sc.nextLine();
+                System.out.print("Enter author: ");
+                String author = sc.nextLine();
+                Book book = new Book(id, title, author);
+                library.addBook(book);
+            } else if (choice == 2) {
+                System.out.print("Enter ID of book to replace: ");
+                int id = sc.nextInt();
+                sc.nextLine(); // consume newline
+                library.replaceBook(id);
+            } else if (choice == 3) {
+                library.displayBooks();
+            } else if (choice == 4) {
+                System.out.println("Exiting.");
+                break;
+            } else {
+                System.out.println("Invalid option.");
+            }
+        }
+    }
+}
+
+
+
+class Library {
+
+    private Book[] books;
+    private int count;
+
+    public Library() {
+        this.books = new Book[5];
+        this.count = 0;
+    }
+
+    // Method to add a book to the library
+    public void addBook(Book book) {
+        if (count < books.length) {
+            books[count++] = book;
+            System.out.println("Book added.");
+        } else {
+            System.out.println("Library full.");
+        }
+    }
+
+    // Method to replace a book from the library
+    public void replaceBook(int bookID) {
+        for (int i = 0; i < count; i++) {
+            if (books[i].getBookID() == bookID) {
+                Scanner sc = new Scanner(System.in);
+                System.out.print("Enter new title: ");
+                String newTitle = sc.nextLine();
+                System.out.print("Enter new author: ");
+                String newAuthor = sc.nextLine();
+                books[i].setTitle(newTitle);
+                books[i].setAuthor(newAuthor);
+                System.out.println("Book replaced.");
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
+
+    // Method to display all books in the library
+    public void displayBooks() {
+        if (count == 0) {
+            System.out.println("No books in library.");
+        } else {
+            for (int i = 0; i < count; i++) {
+                books[i].display();
+            }
+        }
+    }
+}
+
+class Book {
+    // attributes
+    private int bookID;
+    private String title;
+    private String author;
+    private boolean isAvailable;
+
+    // Constructor to initialize book attributes
+    public Book(int bookID, String title, String author) {
+        this.bookID = bookID;
+        this.title = title;
+        this.author = author;
+        this.isAvailable = true;
+    }
+
+    // Getter and setter methods for book attributes
+    public int getBookID() { return bookID; }
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public boolean isAvailable() { return isAvailable; }
+
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setAvailable(boolean available) { isAvailable = available; }
+
+    public void display() {
+        System.out.println("ID: " + bookID + ", Title: " + title + ", Author: " + author + ", Available: " + isAvailable);
+    }
+}
